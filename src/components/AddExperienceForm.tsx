@@ -1,22 +1,40 @@
 import { useForm } from "react-hook-form";
 import type { JobExperience } from "../types";
+import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const jobExperienceSchema= z.object({ 
+    title: z.string().min(1, "Title is required"),
+    company: z.string().min(1, "Company is required"),
+    employmentType: z.string().optional(),
+    isCurrent: z.boolean().optional(),
+});
 
 function AddExperienceForm() {
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: zodResolver(jobExperienceSchema),
+    });
+
+    const onSubmit = (data) => {
+        console.log(data); // Form data is valid here
+    };
+    
     return (
         <div>
-            <form className="p-4">
+            <form className="p-4" onSubmit={handleSubmit(onSubmit)}>
                 <h2 className="text-2xl font-bold mb-4">Add Experience</h2>
                 <div className="text-gray-500 text-sm mb-4">* Indicates required</div>
                 <div className="mb-4">
                     <label className="block mb-2" htmlFor="job_title">
-                        Title
+                        Title *
                     </label>
                     <input
                         type="text"
                         id="job_title"
                         className="w-full p-2 border border-gray-300 rounded"
                         placeholder="Ex: Retail Sales Manager"
-                    />
+                        {...register('title')} />
+                    {errors.title && <span className={errors.title ? "text-red-500 text-sm" : ""}>{"⛔ " + errors.title.message}</span>}                    
                 </div>
                 <div className="mb-4">
                     <label className="block mb-2" htmlFor="employment_type">
@@ -35,14 +53,15 @@ function AddExperienceForm() {
                 </div>
                 <div className="mb-4">
                     <label className="block mb-2" htmlFor="company">
-                        Company
+                        Company *
                     </label>
                     <input
                         type="text"
                         id="company"
                         className="w-full p-2 border border-gray-300 rounded"
                         placeholder="Ex: TechCorp Inc."
-                    />
+                        {...register('company')} />
+                    {errors.company && <span className={errors.company ? "text-red-500 text-sm" : ""}>{"⛔ " + errors.company.message}</span>}      
                 </div>
                 <div className="mb-4">
                     <label className="block mb-2">
@@ -55,7 +74,7 @@ function AddExperienceForm() {
                     </label>
                 </div>
                 <div className="mb-4">
-                    <label className="block mb-2">Start Date</label>
+                    <label className="block mb-2">Start Date *</label>
                     <div className="flex space-x-2">
                         <select
                             id="start_month"
@@ -77,7 +96,7 @@ function AddExperienceForm() {
                     </div>
                 </div>
                 <div className="mb-4">
-                    <label className="block mb-2">End Date</label>
+                    <label className="block mb-2">End Date *</label>
                     <div className="flex space-x-2">
                         <select id="end_month" className="flex-1 p-2 border border-gray-300 rounded">
                             <option value="">Month</option>
@@ -97,10 +116,19 @@ function AddExperienceForm() {
                 </div>
                 <footer className="flex justify-end space-x-2 m-8">
                     <button 
-                        type="button"
-                        className="px-10 py-2 bg-blue-300 text-white-800 rounded-full hover:bg-blue-400"
+                        type="type"
+                        className="px-10 py-2 bg-gray-300 text-white-800 rounded-full hover:bg-gray-400"
                         onClick={() => {
                             // Handle cancel action
+                        }}
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        type="submit"
+                        className="px-10 py-2 bg-blue-300 text-white-800 rounded-full hover:bg-blue-400"
+                        onClick={() => {
+                            // Handle action
                         }}
                     >
                         Save
