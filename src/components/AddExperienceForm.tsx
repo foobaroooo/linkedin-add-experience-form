@@ -144,7 +144,7 @@ function AddExperienceForm({ onSubmit, onCancel } : { onSubmit: (data: JobExperi
                 <footer className="flex justify-end space-x-2 m-8">
                     <button 
                         type="button"
-                        className="hand-cursor-button px-10 py-2 bg-gray-300 text-white-800 rounded-full hover:bg-gray-400"
+                        className="cursor-pointer px-10 py-2 bg-gray-300 text-white-800 rounded-full hover:bg-gray-400"
                         onClick={() => {
                             // Handle cancel action
                             onCancel()
@@ -154,7 +154,7 @@ function AddExperienceForm({ onSubmit, onCancel } : { onSubmit: (data: JobExperi
                     </button>
                     <button 
                         type="submit"
-                        className="hand-cursor-button px-10 py-2 bg-blue-300 text-white-800 rounded-full hover:bg-blue-400"
+                        className="cursor-pointer px-10 py-2 bg-blue-300 text-white-800 rounded-full hover:bg-blue-400"
                     >
                         Save
                     </button>
