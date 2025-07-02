@@ -4,18 +4,18 @@ import * as z from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const jobExperienceSchema= z.object({ 
-    title: z.string().min(1, "Title is required"),
+    job_title: z.string().min(1, "Title is required"),
     company: z.string().min(1, "Company is required"),
-    employmentType: z.string().optional(),
-    isCurrent: z.boolean().optional(),
-    startDate: z.object({
+    employment_type: z.string().optional(),
+    is_current: z.boolean().optional(),
+    start_date: z.object({
         month: z.string(),
         year: z.string()
     }).refine(
         (data) => data.month && data.year,
         { message: "Start date is required" }
     ),
-    endDate: z.object({
+    end_date: z.object({
         month: z.string(),
         year: z.string()
     }).refine(
@@ -24,15 +24,11 @@ const jobExperienceSchema= z.object({
     )
 });
 
-function AddExperienceForm() {
+function AddExperienceForm({ onSubmit, onCancel } : { onSubmit: (data: JobExperience) => void, onCancel: () => void }) {
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(jobExperienceSchema),
     });
 
-    const onSubmit = (data) => {
-        console.log(data); // Form data is valid here
-    };
-    
     return (
         <div>
             <form className="p-4" onSubmit={handleSubmit(onSubmit)}>
@@ -47,8 +43,8 @@ function AddExperienceForm() {
                         id="job_title"
                         className="w-full p-2 border border-gray-300 rounded"
                         placeholder="Ex: Retail Sales Manager"
-                        {...register('title')} />
-                    {errors.title && <span className={errors.title ? "text-red-500 text-sm" : ""}>{"⛔ " + errors.title.message}</span>}                    
+                        {...register('job_title')} />
+                    {errors.job_title && <span className={errors.job_title ? "text-red-500 text-sm" : ""}>{"⛔ " + errors.job_title.message}</span>}                    
                 </div>
                 <div className="mb-4">
                     <label className="block mb-2" htmlFor="employment_type">
@@ -93,7 +89,7 @@ function AddExperienceForm() {
                         <select
                             id="start_month"
                             className="flex-1 p-2 border border-gray-300 rounded"
-                            {...register('startDate.month')}
+                            {...register('start_date.month')}
                         >
                             <option value="">Month</option>
                             {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month) => (
@@ -107,12 +103,12 @@ function AddExperienceForm() {
                             id="start_year"
                             className="flex-1 p-2 border border-gray-300 rounded"
                             placeholder="Year"
-                            {...register('startDate.year')}
+                            {...register('start_date.year')}
                         />
                     </div>
-                    {errors.startDate && (
+                    {errors.start_date && (
                         <span className="text-red-500 text-sm">
-                            {"⛔ " + errors.startDate.message}
+                            {"⛔ " + errors.start_date.message}
                         </span>
                     )}
                 </div>
@@ -122,7 +118,7 @@ function AddExperienceForm() {
                         <select 
                             id="end_month" 
                             className="flex-1 p-2 border border-gray-300 rounded"
-                            {...register('endDate.month')}
+                            {...register('end_date.month')}
                         >
                             <option value="">Month</option>
                             {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month) => (
@@ -136,31 +132,29 @@ function AddExperienceForm() {
                             id="end_year"
                             className="flex-1 p-2 border border-gray-300 rounded"
                             placeholder="Year"
-                            {...register('endDate.year')}
+                            {...register('end_date.year')}
                         />
                     </div>
-                    {errors.endDate && (
+                    {errors.end_date && (
                         <span className="text-red-500 text-sm">
-                            {"⛔ " + errors.endDate.message}
+                            {"⛔ " + errors.end_date.message}
                         </span>
                     )}
                 </div>
                 <footer className="flex justify-end space-x-2 m-8">
                     <button 
                         type="button"
-                        className="px-10 py-2 bg-gray-300 text-white-800 rounded-full hover:bg-gray-400"
+                        className="hand-cursor-button px-10 py-2 bg-gray-300 text-white-800 rounded-full hover:bg-gray-400"
                         onClick={() => {
                             // Handle cancel action
+                            onCancel()
                         }}
                     >
                         Cancel
                     </button>
                     <button 
                         type="submit"
-                        className="px-10 py-2 bg-blue-300 text-white-800 rounded-full hover:bg-blue-400"
-                        onClick={() => {
-                            // Handle action
-                        }}
+                        className="hand-cursor-button px-10 py-2 bg-blue-300 text-white-800 rounded-full hover:bg-blue-400"
                     >
                         Save
                     </button>

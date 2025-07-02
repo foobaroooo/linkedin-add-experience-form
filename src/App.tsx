@@ -41,7 +41,7 @@ function App() {
           <dialog className="fixed inset-0 bg-black/60 flex items-baseline pt-10 justify-center w-full h-full">
             <div className="bg-white rounded shadow-lg container w-3xl">
               <AddExperienceForm
-                onSubmit={(newExperience) => {
+                onSubmit={(newExperience : JobExperience) => {
                   setExperienceList((prev) => [newExperience, ...prev]);
                   setShowAddExperienceForm(false);
                 }}
