@@ -32,6 +32,10 @@ type JobExperienceFormProps = {
     onCancel: () => void;
 };
 
+const YEAR_OPTIONS = Array.from(
+  { length: 50 },
+  (_, i) => new Date().getFullYear() - i
+).map((year) => year.toString());
 
 function AddExperienceForm({ onSubmit, onCancel } : JobExperienceFormProps) {
     const { register, handleSubmit, formState: { errors } } = useForm<JobExperienceSchemaType>({
@@ -107,13 +111,17 @@ function AddExperienceForm({ onSubmit, onCancel } : JobExperienceFormProps) {
                                 </option>
                             ))}
                         </select>
-                        <input
-                            type="number"
+                        <select
                             id="start_year"
                             className="flex-1 p-2 border border-gray-300 rounded"
-                            placeholder="Year"
                             {...register('start_date.year')}
-                        />
+                        >
+                            {YEAR_OPTIONS.map((year) => (
+                                <option key={year} value={year}>
+                                {year}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     {errors.start_date && (
                         <span className="text-red-500 text-sm">
@@ -136,13 +144,17 @@ function AddExperienceForm({ onSubmit, onCancel } : JobExperienceFormProps) {
                                 </option>
                             ))}
                         </select>
-                        <input
-                            type="number"
+                        <select
                             id="end_year"
                             className="flex-1 p-2 border border-gray-300 rounded"
-                            placeholder="Year"
                             {...register('end_date.year')}
-                        />
+                        >
+                            {YEAR_OPTIONS.map((year) => (
+                                <option key={year} value={year}>
+                                {year}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     {errors.end_date && (
                         <span className="text-red-500 text-sm">
