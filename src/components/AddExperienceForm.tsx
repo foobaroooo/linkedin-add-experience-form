@@ -3,7 +3,7 @@ import type { JobExperience } from "../types";
 import * as z from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 
-const jobExperienceSchema= z.object({ 
+const JobExperienceSchema= z.object({ 
     job_title: z.string().min(1, "Title is required"),
     company: z.string().min(1, "Company is required"),
     employment_type: z.string().optional(),
@@ -24,9 +24,13 @@ const jobExperienceSchema= z.object({
     )
 });
 
+//  Corina: It's common practice to type the schema and the `useForm` hook
+type JobExperienceSchemaType = z.infer<typeof JobExperienceSchema>;
+
+
 function AddExperienceForm({ onSubmit, onCancel } : { onSubmit: (data: JobExperience) => void, onCancel: () => void }) {
-    const { register, handleSubmit, formState: { errors } } = useForm({
-        resolver: zodResolver(jobExperienceSchema),
+    const { register, handleSubmit, formState: { errors } } = useForm<JobExperienceSchemaType>({
+        resolver: zodResolver(JobExperienceSchema),
     });
 
     return (
