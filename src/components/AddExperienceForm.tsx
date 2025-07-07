@@ -2,27 +2,47 @@ import { useForm } from "react-hook-form";
 import type { JobExperience } from "../types";
 import * as z from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { ZodType } from "zod";
 
-const JobExperienceSchema= z.object({ 
+const JobSchema= z.object({ 
     job_title: z.string().min(1, "Title is required"),
     company: z.string().min(1, "Company is required"),
-    employment_type: z.string().optional(),
+    employment_type: z.string(),
     is_current: z.boolean().optional(),
     start_date: z.object({
         month: z.string(),
         year: z.string()
-    }).refine(
+    })
+    .required()
+    .refine(
         (data) => data.month && data.year,
         { message: "Start date is required" }
-    ),
-    end_date: z.object({
-        month: z.string(),
-        year: z.string()
-    }).refine(
-        (data) => data.month && data.year,
-        { message: "End date is required" }
     )
 });
+
+const CurrentJobSchema = JobSchema.extend({
+    is_current: z.literal(true)
+});
+
+const PastJobSchema = JobSchema.merge(
+    z.object({
+        is_current: z.literal(false),
+        end_date: z.object({
+            month: z.string(),
+            year: z.string()
+        })
+        .required()
+        .refine(
+            (data) => data.month && data.year,
+            { message: "End date is required" }
+        )
+    })
+);
+
+const JobExperienceSchema: ZodType<JobExperience> = z.union([
+    CurrentJobSchema,
+    PastJobSchema
+]);
 
 //  Corina: It's common practice to type the schema and the `useForm` hook
 type JobExperienceSchemaType = z.infer<typeof JobExperienceSchema>;
