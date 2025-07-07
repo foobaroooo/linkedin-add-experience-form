@@ -3,6 +3,7 @@ import type { JobExperience } from "../types";
 import * as z from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { ZodType } from "zod";
+import { useEffect } from "react";
 
 const JobSchema= z.object({ 
     job_title: z.string().min(1, "Title is required"),
@@ -58,9 +59,19 @@ const YEAR_OPTIONS = Array.from(
 ).map((year) => year.toString());
 
 function AddExperienceForm({ onSubmit, onCancel } : JobExperienceFormProps) {
-    const { register, handleSubmit, formState: { errors } } = useForm<JobExperienceSchemaType>({
+    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<JobExperienceSchemaType>({
         resolver: zodResolver(JobExperienceSchema),
     });
+
+    const isCurrent = watch("is_current");
+
+    useEffect(() => {
+        if (isCurrent === true) {
+        setValue("end_date.month", "");
+        setValue("end_date.year", "");
+        }
+    }, [isCurrent, setValue]);
+
 
     return (
         <div>
@@ -156,6 +167,7 @@ function AddExperienceForm({ onSubmit, onCancel } : JobExperienceFormProps) {
                             id="end_month" 
                             className="flex-1 p-2 border border-gray-300 rounded"
                             {...register('end_date.month')}
+                            disabled={isCurrent}
                         >
                             <option value="">Month</option>
                             {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month) => (
@@ -168,6 +180,7 @@ function AddExperienceForm({ onSubmit, onCancel } : JobExperienceFormProps) {
                             id="end_year"
                             className="flex-1 p-2 border border-gray-300 rounded"
                             {...register('end_date.year')}
+                            disabled={isCurrent}
                         >
                             {YEAR_OPTIONS.map((year) => (
                                 <option key={year} value={year}>
