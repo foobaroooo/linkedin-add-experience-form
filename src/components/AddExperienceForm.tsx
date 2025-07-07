@@ -181,7 +181,7 @@ function AddExperienceForm({ onSubmit, onCancel } : JobExperienceFormProps) {
                 <label className="block mb-2">End Date *</label>
                 <div className="flex space-x-2">
                     <select 
-                        className="flex-1 p-2 border border-gray-300 rounded"
+                        className="flex-1 p-2 border border-gray-300 rounded disabled:bg-gray-300"
                         {...register('end_date.month')}
                         disabled={isCurrent}
                     >
@@ -193,7 +193,7 @@ function AddExperienceForm({ onSubmit, onCancel } : JobExperienceFormProps) {
                         ))}
                     </select>
                     <select
-                        className="flex-1 p-2 border border-gray-300 rounded"
+                        className="flex-1 p-2 border border-gray-300 rounded disabled:bg-gray-300"
                         {...register('end_date.year')}
                         disabled={isCurrent}
                     >
