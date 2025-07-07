@@ -27,8 +27,13 @@ const JobExperienceSchema= z.object({
 //  Corina: It's common practice to type the schema and the `useForm` hook
 type JobExperienceSchemaType = z.infer<typeof JobExperienceSchema>;
 
+type JobExperienceFormProps = {
+    onSubmit: (data: JobExperience) => void;
+    onCancel: () => void;
+};
 
-function AddExperienceForm({ onSubmit, onCancel } : { onSubmit: (data: JobExperience) => void, onCancel: () => void }) {
+
+function AddExperienceForm({ onSubmit, onCancel } : JobExperienceFormProps) {
     const { register, handleSubmit, formState: { errors } } = useForm<JobExperienceSchemaType>({
         resolver: zodResolver(JobExperienceSchema),
     });
